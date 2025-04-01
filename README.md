@@ -1,3 +1,3 @@
-# S.E.-Diagnostico-sobre-enfermedades-cutaneas
+# S.E.-VENTA DE AUTOMÓVILES
 >[!NOTE]
 >Proyecto de fase Sistemas Inteligentes
