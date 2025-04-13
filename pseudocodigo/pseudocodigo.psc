@@ -314,6 +314,7 @@ FinProceso
 // --- Vehículos Eléctricos/Híbridos ---
 (16, "Toyota", "Prius", 2016, "hatchback", "hibrido", "automatica", "delantera", 121, 3.7, 4, 4, 2, 2, 5, Verdadero, Verdadero, 25000, Verdadero, Verdadero, Falso, 4, 5)
 (17, "Hyundai", "Kona Electric", 2019, "suv", "electrico", "automatica", "delantera", 201, 14.3, 5, 4, 3, 2, 5, Verdadero, Verdadero, 38000, Verdadero, Verdadero, Verdadero, 5, 5)
+
 // ==================== VEHÍCULOS NUEVOS (2024-2025) ====================  
 // Estructura: (id, marca, modelo, año, tipo, tipoCombustible, transmision, traccion, potencia, consumo, seguridad,  
 //             espacioPasajeros, espacioMaletero, asientosIsofix, nivelTecnologico, asistenciaConduccion,  
