@@ -28,7 +28,7 @@
    (slot id (type INTEGER))
    (slot marca (type SYMBOL))
    (slot modelo (type SYMBOL))
-   (slot año (type INTEGER))
+   (slot ano (type INTEGER))
    (slot tipo (type SYMBOL))
    (slot tipoCombustible (type SYMBOL))
    (slot transmision (type SYMBOL))
@@ -65,17 +65,17 @@
 (deffacts vehiculos-disponibles
    ;; Segmento Premium
    (vehiculo 
-      (id 1) (marca Audi) (modelo A4) (año 2015)
+      (id 1) (marca Audi) (modelo A4) (ano 2015)
       (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
       (traccion delantera) (potencia 190) (consumo 6.5) (seguridad 5)
       (espacioPasajeros 4) (espacioMaletero 3) (asientosIsofix 2)
       (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
-      (precio 32000) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (precio 32000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
       (planFinanciamiento TRUE) (calificacionVentas 4) (garantia 3)
    )
    
    (vehiculo 
-      (id 2) (marca Audi) (modelo A3) (año 2019)
+      (id 2) (marca Audi) (modelo A3) (ano 2019)
       (tipo hatchback) (tipoCombustible gasolina) (transmision automatica)
       (traccion delantera) (potencia 150) (consumo 5.8) (seguridad 5)
       (espacioPasajeros 3) (espacioMaletero 2) (asientosIsofix 2)
@@ -86,7 +86,7 @@
    
    ;; Segmento Familiar
    (vehiculo 
-      (id 5) (marca Toyota) (modelo Camry) (año 2017)
+      (id 5) (marca Toyota) (modelo Camry) (ano 2017)
       (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
       (traccion delantera) (potencia 178) (consumo 7.1) (seguridad 4)
       (espacioPasajeros 5) (espacioMaletero 3) (asientosIsofix 3)
@@ -97,7 +97,7 @@
    
    ;; SUV Medianos
    (vehiculo 
-      (id 8) (marca Mazda) (modelo CX-5) (año 2017)
+      (id 8) (marca Mazda) (modelo CX-5) (ano 2017)
       (tipo suv) (tipoCombustible gasolina) (transmision automatica)
       (traccion 4x4) (potencia 187) (consumo 6.8) (seguridad 4)
       (espacioPasajeros 5) (espacioMaletero 4) (asientosIsofix 3)
@@ -108,7 +108,7 @@
    
    ;; Vehículos Pequeños/Económicos
    (vehiculo 
-      (id 11) (marca Toyota) (modelo Corolla) (año 2019)
+      (id 11) (marca Toyota) (modelo Corolla) (ano 2019)
       (tipo compacto) (tipoCombustible gasolina) (transmision manual)
       (traccion delantera) (potencia 132) (consumo 5.7) (seguridad 4)
       (espacioPasajeros 4) (espacioMaletero 2) (asientosIsofix 2)
@@ -119,7 +119,7 @@
    
    ;; Vehículos Eléctricos/Híbridos
    (vehiculo 
-      (id 16) (marca Toyota) (modelo Prius) (año 2016)
+      (id 16) (marca Toyota) (modelo Prius) (ano 2016)
       (tipo hatchback) (tipoCombustible hibrido) (transmision automatica)
       (traccion delantera) (potencia 121) (consumo 3.7) (seguridad 4)
       (espacioPasajeros 4) (espacioMaletero 2) (asientosIsofix 2)
@@ -130,7 +130,7 @@
    
    ;; Vehículos Nuevos (2024-2025)
    (vehiculo 
-      (id 101) (marca Mercedes-Benz) (modelo EQS-Sedan) (año 2025)
+      (id 101) (marca Mercedes-Benz) (modelo EQS-Sedan) (ano 2025)
       (tipo sedan) (tipoCombustible electrico) (transmision automatica)
       (traccion trasera) (potencia 536) (consumo 16.0) (seguridad 5)
       (espacioPasajeros 5) (espacioMaletero 3) (asientosIsofix 2)
@@ -140,7 +140,7 @@
    )
    
    (vehiculo 
-      (id 111) (marca Toyota) (modelo Camry-Hybrid) (año 2025)
+      (id 111) (marca Toyota) (modelo Camry-Hybrid) (ano 2025)
       (tipo sedan) (tipoCombustible hibrido) (transmision automatica)
       (traccion delantera) (potencia 225) (consumo 4.3) (seguridad 5)
       (espacioPasajeros 5) (espacioMaletero 3) (asientosIsofix 3)
@@ -160,13 +160,13 @@
                    (precio ?precio) 
                    (seguridad ?seg) 
                    (disponible ?disp)
-                   (año ?año))
+                   (ano ?ano))
    
    (test (and (eq ?disp TRUE)
               (>= ?seg 4)
               (<= ?precio ?presupuesto)
               (if (eq ?usado TRUE)
-                  then (<= ?año (- 2024 3))  ; Asumiendo año actual 2024
+                  then (<= ?ano (- 2024 3))
                   else TRUE)))
    
    =>
@@ -385,7 +385,8 @@
    ?u <- (usuario)
    =>
    (bind ?recoms (find-all-facts ((?r recomendacion)) TRUE))
-   (if (> (length ?recoms) 0)
+   (bind ?count (length$ ?recoms))
+   (if (> ?count 0)
       then
       (printout t crlf "=== RECOMENDACIONES FINALES ===" crlf)
       (printout t "Perfil del usuario:" crlf)
@@ -393,8 +394,8 @@
       (printout t "Presupuesto: $" (fact-slot-value ?u presupuesto) crlf)
       (printout t "Uso principal: " (fact-slot-value ?u usoPrincipal) crlf crlf)
       
-      (printout t "Vehículos recomendados:" crlf)
-      (foreach ?r ?recoms
+      (printout t "Vehiculos recomendados:" crlf)
+      (do-for-all-facts ((?r recomendacion)) TRUE
          (bind ?vid (fact-slot-value ?r id-vehiculo))
          (bind ?v (find-fact ((?v vehiculo)) (eq ?v:id ?vid)))
          (printout t 
@@ -406,7 +407,7 @@
          )
       )
       else
-      (printout t "No se encontraron vehículos adecuados para tu perfil" crlf)
+      (printout t "No se encontraron vehiculos adecuados para tu perfil" crlf)
    )
 )
 
@@ -415,11 +416,11 @@
    (usuario 
       (edad 35)
       (genero masculino)
-      (ingresos 45000)
+      (ingresos 45000.0)
       (ocupacion profesional)
       (ubicacion urbano)
       (estiloPersonalidad practico)
-      (presupuesto 30000)
+      (presupuesto 30000.0)
       (usoPrincipal ciudad)
       (esPrimerVehiculo FALSE)
       (necesitaFinanciacion TRUE)
@@ -442,9 +443,9 @@
    (initial-fact)
    =>
    (printout t "===== SISTEMA DE RECOMENDACIÓN DE AUTOS =====" crlf)
-   (printout t "Cargando datos del usuario y vehículos..." crlf crlf)
+   (printout t "Cargando datos del usuario y vehiculos..." crlf crlf)
 )
 
 ;; ==================== EJECUCIÓN ====================
-(reset)
-(run)
+; (reset)
+; (run)
