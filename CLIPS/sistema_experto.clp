@@ -178,30 +178,36 @@
    (usuario (estiloPersonalidad aventurero))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (tipo ?tipo))
+   (not (estilo-aventurero-aplicado ?id))
    (test (or (eq ?tipo suv) (eq ?tipo 4x4)))
    =>
    (modify ?vf (puntuacion (+ ?punt 8.0)))
+   (assert (estilo-aventurero-aplicado ?id))
 )
 
 (defrule evaluar-estilo-practico
    (usuario (estiloPersonalidad practico))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (tipo ?tipo))
+   (not (estilo-practico-aplicado ?id)) ; Evita reactivación
    (test (or (eq ?tipo hatchback) (eq ?tipo compacto)))
    =>
    (modify ?vf (puntuacion (+ ?punt 7.0)))
+   (assert (estilo-practico-aplicado ?id)) ; Marca como aplicado
 )
 
 (defrule evaluar-estilo-sofisticado
    (usuario (estiloPersonalidad sofisticado))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (marca ?marca) (nivelTecnologico ?tec))
+   (not (estilo-sofisticado-aplicado ?id))
    (test (and (or (eq ?marca Audi) 
                   (eq ?marca Mercedes_Benz) 
                   (eq ?marca BMW))
               (>= ?tec 4)))
    =>
    (modify ?vf (puntuacion (+ ?punt 9.0)))
+   (assert (estilo-sofisticado-aplicado ?id))
 )
 
 ;; 2. Demográficos
@@ -209,18 +215,22 @@
    (usuario (edad ?e&:(< ?e 25)))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (nivelTecnologico ?tec) (conectividad ?conec))
+   (not (demografico-joven-aplicado ?id))
    (test (and (>= ?tec 4) (eq ?conec TRUE)))
    =>
    (modify ?vf (puntuacion (+ ?punt 3.0)))
+   (assert (demografico-joven-aplicado ?id))
 )
 
 (defrule evaluar-demograficos-mayor
    (usuario (edad ?e&:(>= ?e 60)))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (asistenciaConduccion ?asis))
+   (not (demografico-mayor-aplicado ?id))
    (test (eq ?asis TRUE))
    =>
    (modify ?vf (puntuacion (+ ?punt 4.0)))
+   (assert (demografico-mayor-aplicado ?id))
 )
 
 (defrule evaluar-demograficos-ingresos-bajos
@@ -228,20 +238,24 @@
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (precio ?precio))
    ?u <- (usuario (presupuesto ?presup))
+   (not (demografico-bajo-aplicado ?id))
    (test (< ?precio (* ?presup 0.8)))
    =>
    (modify ?vf (puntuacion (+ ?punt 2.0)))
+   (assert (demografico-bajo-aplicado ?id))
 )
 
 (defrule evaluar-demograficos-ingresos-altos
    (usuario (ingresos ?i&:(> ?i 100000)))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (marca ?marca))
+   (not (demografico-alto-aplicado ?id))
    (test (or (eq ?marca Audi) 
              (eq ?marca Mercedes_Benz) 
              (eq ?marca BMW)))
    =>
    (modify ?vf (puntuacion (+ ?punt 3.0)))
+   (assert (demografico-alto-aplicado ?id))
 )
 
 ;; 3. Estilo de Vida
@@ -249,44 +263,54 @@
    (usuario (tieneHijos TRUE) (cantidadHijos ?hijos))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (asientosIsofix ?isofix) (espacioPasajeros ?espacio))
+   (not (familia-con-hijos-aplicada ?id))
    (test (and (>= ?isofix ?hijos) (>= ?espacio 4)))
    =>
    (modify ?vf (puntuacion (+ ?punt 5.0)))
+   (assert (familia-con-hijos-aplicada ?id))
 )
 
 (defrule evaluar-familia-numerosa
    (usuario (tieneHijos TRUE) (cantidadHijos ?hijos&:(> ?hijos 2)))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (tipo minivan))
+   (not (familia-numerosa-aplicada ?id))
    =>
    (modify ?vf (puntuacion (+ ?punt 3.0)))
+   (assert (familia-numerosa-aplicada ?id))
 )
 
 (defrule evaluar-mascotas-grandes
    (usuario (tieneMascotas TRUE) (tipoMascota grande))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (espacioMaletero ?maletero))
+   (not (mascotas-grandes-aplicada ?id))
    (test (>= ?maletero 4))
    =>
    (modify ?vf (puntuacion (+ ?punt 3.0)))
+   (assert (mascotas-grandes-aplicada ?id))
 )
 
 (defrule evaluar-uso-urbano
    (usuario (usoPrincipal urbano))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (tipo ?tipo))
+   (not (uso-urbano-aplicado ?id))
    (test (or (eq ?tipo compacto) (eq ?tipo hatchback)))
    =>
    (modify ?vf (puntuacion (+ ?punt 4.0)))
+   (assert (uso-urbano-aplicado ?id))
 )
 
 (defrule evaluar-uso-carretera
    (usuario (usoPrincipal carretera))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (consumo ?consumo) (seguridad ?seg))
+   (not (uso-carretera-aplicado ?id))
    (test (and (< ?consumo 6.0) (>= ?seg 4)))
    =>
    (modify ?vf (puntuacion (+ ?punt 5.0)))
+   (assert (uso-carretera-aplicado ?id))
 )
 
 ;; 4. Preferencias específicas
@@ -294,32 +318,40 @@
    (usuario (preferenciaMarca ?marca))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (marca ?marca))
+   (not (preferencia-marca-aplicada ?id))
    =>
    (modify ?vf (puntuacion (+ ?punt 10.0)))
+   (assert (preferencia-marca-aplicada ?id))
 )
 
 (defrule evaluar-evitar-marca
    (usuario (evitarMarca ?marca))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (marca ?marca))
+   (not (evitar-marca-aplicada ?id))
    =>
    (modify ?vf (puntuacion (- ?punt 10.0)))
+   (assert (evitar-marca-aplicada ?id))
 )
 
 (defrule evaluar-combustible-preferido
    (usuario (tipoCombustiblePreferido ?combustible))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (tipoCombustible ?combustible))
+   (not (combustible-preferido-aplicado ?id))
    =>
    (modify ?vf (puntuacion (+ ?punt 5.0)))
+   (assert (combustible-preferido-aplicado ?id))
 )
 
 (defrule evaluar-transmision-preferida
    (usuario (transmisionPreferida ?transmision))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (transmision ?transmision))
+   (not (transmision-preferida-aplicada ?id))
    =>
    (modify ?vf (puntuacion (+ ?punt 3.0)))
+   (assert (transmision-preferida-aplicada ?id))
 )
 
 ;; 5. Primer vehículo y financiación
@@ -327,16 +359,20 @@
    (usuario (esPrimerVehiculo TRUE))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (tieneBonoPrimerAuto TRUE))
+   (not (primer-vehiculo-aplicado ?id))
    =>
    (modify ?vf (puntuacion (+ ?punt 5.0)))
+   (assert (primer-vehiculo-aplicado ?id))
 )
 
 (defrule evaluar-necesita-financiacion
    (usuario (necesitaFinanciacion TRUE))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (planFinanciamiento TRUE))
+   (not (necesita-financiacion-aplicado ?id))
    =>
    (modify ?vf (puntuacion (+ ?punt 4.0)))
+   (assert (necesita-financiacion-aplicado ?id))
 )
 
 ;; ==================== REGLAS FINALES ====================
@@ -379,6 +415,14 @@
       (rechazosConsecutivos 0)
       (vehiculosVistos)
    )
+)
+
+(defrule mostrar-recomendaciones
+   (declare (salience -10)) ; Baja prioridad para ejecutarse al final
+   ?r <- (recomendacion (id-vehiculo ?id) (puntuacion ?punt) (motivo ?motivo))
+   =>
+   (printout t "Recomendación: " ?motivo crlf)
+   (retract ?r)
 )
 
 (defrule iniciar-sistema
