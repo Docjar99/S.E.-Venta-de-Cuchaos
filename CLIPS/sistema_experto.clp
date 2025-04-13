@@ -1,4 +1,3 @@
-(clear)  ; Limpia todas las definiciones previas
 
 ;; ==================== DEFINICIÓN DE PLANTILLAS ====================
 (deftemplate usuario
@@ -352,35 +351,7 @@
    ))
 )
 
-(defrule mostrar-recomendaciones
-   (declare (salience -10))
-   ?u <- (usuario)
-   =>
-   (bind ?recoms (find-all-facts ((?r recomendacion)) TRUE))
-   (bind ?count (length$ ?recoms))
-   (if (> ?count 0)
-      then
-         (printout t crlf "=== RECOMENDACIONES FINALES ===" crlf)
-         (printout t "Perfil del usuario:" crlf)
-         (printout t "Edad: " (fact-slot-value ?u edad) crlf)
-         (printout t "Presupuesto: $" (format nil "$%,.2f" (fact-slot-value ?u presupuesto)) crlf)
-         (printout t "Uso principal: " (fact-slot-value ?u usoPrincipal) crlf crlf)
-         (printout t "Vehiculos recomendados:" crlf)
-         (do-for-all-facts ((?r recomendacion)) TRUE
-            (bind ?vid (fact-slot-value ?r id-vehiculo))
-            (bind ?veh (find-fact ((?v vehiculo)) (eq ?v:id ?vid)))
-            (printout t 
-               "ID: " ?vid " | " 
-               (fact-slot-value ?veh marca) " " (fact-slot-value ?veh modelo) " | "
-               "Puntuación: " (format nil "%.1f" (fact-slot-value ?r puntuacion)) " | "
-               "Precio: " (format nil "$%,.2f" (fact-slot-value ?veh precio)) " | "
-               "Tipo: " (fact-slot-value ?veh tipo) crlf
-            )
-         )
-      else
-         (printout t "No se encontraron vehiculos adecuados para tu perfil" crlf)
-   )
-)
+
 
 ;; ==================== INICIALIZACIÓN DEL SISTEMA ====================
 (deffacts datos-iniciales
@@ -416,7 +387,3 @@
    (printout t "===== SISTEMA DE RECOMENDACIÓN DE AUTOS =====" crlf)
    (printout t "Cargando datos del usuario y vehiculos..." crlf crlf)
 )
-
-;; ==================== EJECUCIÓN ====================
-(reset)
-(run)
