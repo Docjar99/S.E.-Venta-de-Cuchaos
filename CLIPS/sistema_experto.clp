@@ -1,3 +1,5 @@
+(clear)  ; Limpia todas las definiciones previas
+
 ;; ==================== DEFINICIÓN DE PLANTILLAS ====================
 (deftemplate usuario
    (slot edad (type INTEGER))
@@ -80,7 +82,7 @@
       (traccion delantera) (potencia 150) (consumo 5.8) (seguridad 5)
       (espacioPasajeros 3) (espacioMaletero 2) (asientosIsofix 2)
       (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
-      (precio 28000) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
+      (precio 28000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
       (planFinanciamiento FALSE) (calificacionVentas 5) (garantia 3)
    )
    
@@ -91,7 +93,7 @@
       (traccion delantera) (potencia 178) (consumo 7.1) (seguridad 4)
       (espacioPasajeros 5) (espacioMaletero 3) (asientosIsofix 3)
       (nivelTecnologico 4) (asistenciaConduccion FALSE) (conectividad TRUE)
-      (precio 22000) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
+      (precio 22000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
       (planFinanciamiento FALSE) (calificacionVentas 4) (garantia 5)
    )
    
@@ -102,7 +104,7 @@
       (traccion 4x4) (potencia 187) (consumo 6.8) (seguridad 4)
       (espacioPasajeros 5) (espacioMaletero 4) (asientosIsofix 3)
       (nivelTecnologico 4) (asistenciaConduccion TRUE) (conectividad TRUE)
-      (precio 27000) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (precio 27000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
       (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 3)
    )
    
@@ -113,7 +115,7 @@
       (traccion delantera) (potencia 132) (consumo 5.7) (seguridad 4)
       (espacioPasajeros 4) (espacioMaletero 2) (asientosIsofix 2)
       (nivelTecnologico 3) (asistenciaConduccion FALSE) (conectividad TRUE)
-      (precio 18000) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
+      (precio 18000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
       (planFinanciamiento FALSE) (calificacionVentas 4) (garantia 3)
    )
    
@@ -124,51 +126,49 @@
       (traccion delantera) (potencia 121) (consumo 3.7) (seguridad 4)
       (espacioPasajeros 4) (espacioMaletero 2) (asientosIsofix 2)
       (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
-      (precio 25000) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
+      (precio 25000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
       (planFinanciamiento FALSE) (calificacionVentas 4) (garantia 5)
    )
    
    ;; Vehículos Nuevos (2024-2025)
    (vehiculo 
-      (id 101) (marca Mercedes-Benz) (modelo EQS-Sedan) (ano 2025)
+      (id 101) (marca Mercedes_Benz) (modelo EQS_Sedan) (ano 2025)
       (tipo sedan) (tipoCombustible electrico) (transmision automatica)
       (traccion trasera) (potencia 536) (consumo 16.0) (seguridad 5)
       (espacioPasajeros 5) (espacioMaletero 3) (asientosIsofix 2)
       (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
-      (precio 120000) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (precio 120000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
       (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 4)
    )
    
    (vehiculo 
-      (id 111) (marca Toyota) (modelo Camry-Hybrid) (ano 2025)
+      (id 111) (marca Toyota) (modelo Camry_Hybrid) (ano 2025)
       (tipo sedan) (tipoCombustible hibrido) (transmision automatica)
       (traccion delantera) (potencia 225) (consumo 4.3) (seguridad 5)
       (espacioPasajeros 5) (espacioMaletero 3) (asientosIsofix 3)
       (nivelTecnologico 4) (asistenciaConduccion TRUE) (conectividad TRUE)
-      (precio 35000) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
+      (precio 35000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
       (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 5)
    )
 )
 
 ;; ==================== REGLAS DE FILTRADO INICIAL ====================
+;; Se elimina el uso de "if" en el test, por lo que si se requiere evaluar según el tipo (usado/nuevo)
+;; se recomienda dividir esta regla en dos (ejemplo de reglas separadas mostradas en documentación avanzada).
 (defrule filtrar-vehiculos
    ?u <- (usuario (presupuesto ?presupuesto) 
                   (buscaUsado ?usado)
                   (vehiculosVistos $?vistos))
-   
    ?v <- (vehiculo (id ?id) 
                    (precio ?precio) 
                    (seguridad ?seg) 
                    (disponible ?disp)
                    (ano ?ano))
-   
    (test (and (eq ?disp TRUE)
               (>= ?seg 4)
               (<= ?precio ?presupuesto)
-              (if (eq ?usado TRUE)
-                  then (<= ?ano (- 2024 3))
-                  else TRUE)))
-   
+              (or (and (eq ?usado TRUE) (<= ?ano (- 2024 3)))
+                  (and (neq ?usado TRUE) TRUE))))
    =>
    (assert (vehiculo-filtrado (id ?id) (puntuacion 0.0)))
 )
@@ -179,9 +179,7 @@
    (usuario (estiloPersonalidad aventurero))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (tipo ?tipo))
-   
    (test (or (eq ?tipo suv) (eq ?tipo 4x4)))
-   
    =>
    (modify ?vf (puntuacion (+ ?punt 8.0)))
 )
@@ -190,9 +188,7 @@
    (usuario (estiloPersonalidad practico))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (tipo ?tipo))
-   
    (test (or (eq ?tipo hatchback) (eq ?tipo compacto)))
-   
    =>
    (modify ?vf (puntuacion (+ ?punt 7.0)))
 )
@@ -201,10 +197,10 @@
    (usuario (estiloPersonalidad sofisticado))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (marca ?marca) (nivelTecnologico ?tec))
-   
-   (test (and (or (eq ?marca Audi) (eq ?marca Mercedes-Benz) (eq ?marca BMW))
+   (test (and (or (eq ?marca Audi) 
+                  (eq ?marca Mercedes_Benz) 
+                  (eq ?marca BMW))
               (>= ?tec 4)))
-   
    =>
    (modify ?vf (puntuacion (+ ?punt 9.0)))
 )
@@ -213,11 +209,8 @@
 (defrule evaluar-demograficos-joven
    (usuario (edad ?e&:(< ?e 25)))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
-   ?v <- (vehiculo (id ?id) (nivelTecnologico ?tec) 
-                   (conectividad ?conec))
-   
+   ?v <- (vehiculo (id ?id) (nivelTecnologico ?tec) (conectividad ?conec))
    (test (and (>= ?tec 4) (eq ?conec TRUE)))
-   
    =>
    (modify ?vf (puntuacion (+ ?punt 3.0)))
 )
@@ -226,9 +219,7 @@
    (usuario (edad ?e&:(>= ?e 60)))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (asistenciaConduccion ?asis))
-   
    (test (eq ?asis TRUE))
-   
    =>
    (modify ?vf (puntuacion (+ ?punt 4.0)))
 )
@@ -238,9 +229,7 @@
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (precio ?precio))
    ?u <- (usuario (presupuesto ?presup))
-   
    (test (< ?precio (* ?presup 0.8)))
-   
    =>
    (modify ?vf (puntuacion (+ ?punt 2.0)))
 )
@@ -249,9 +238,9 @@
    (usuario (ingresos ?i&:(> ?i 100000)))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (marca ?marca))
-   
-   (test (or (eq ?marca Audi) (eq ?marca Mercedes-Benz) (eq ?marca BMW)))
-   
+   (test (or (eq ?marca Audi) 
+             (eq ?marca Mercedes_Benz) 
+             (eq ?marca BMW)))
    =>
    (modify ?vf (puntuacion (+ ?punt 3.0)))
 )
@@ -260,11 +249,8 @@
 (defrule evaluar-familia-con-hijos
    (usuario (tieneHijos TRUE) (cantidadHijos ?hijos))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
-   ?v <- (vehiculo (id ?id) (asientosIsofix ?isofix) 
-                   (espacioPasajeros ?espacio))
-   
+   ?v <- (vehiculo (id ?id) (asientosIsofix ?isofix) (espacioPasajeros ?espacio))
    (test (and (>= ?isofix ?hijos) (>= ?espacio 4)))
-   
    =>
    (modify ?vf (puntuacion (+ ?punt 5.0)))
 )
@@ -273,7 +259,6 @@
    (usuario (tieneHijos TRUE) (cantidadHijos ?hijos&:(> ?hijos 2)))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (tipo minivan))
-   
    =>
    (modify ?vf (puntuacion (+ ?punt 3.0)))
 )
@@ -282,9 +267,7 @@
    (usuario (tieneMascotas TRUE) (tipoMascota grande))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (espacioMaletero ?maletero))
-   
    (test (>= ?maletero 4))
-   
    =>
    (modify ?vf (puntuacion (+ ?punt 3.0)))
 )
@@ -293,9 +276,7 @@
    (usuario (usoPrincipal urbano))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (tipo ?tipo))
-   
    (test (or (eq ?tipo compacto) (eq ?tipo hatchback)))
-   
    =>
    (modify ?vf (puntuacion (+ ?punt 4.0)))
 )
@@ -304,9 +285,7 @@
    (usuario (usoPrincipal carretera))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (consumo ?consumo) (seguridad ?seg))
-   
    (test (and (< ?consumo 6.0) (>= ?seg 4)))
-   
    =>
    (modify ?vf (puntuacion (+ ?punt 5.0)))
 )
@@ -316,7 +295,6 @@
    (usuario (preferenciaMarca ?marca))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (marca ?marca))
-   
    =>
    (modify ?vf (puntuacion (+ ?punt 10.0)))
 )
@@ -325,7 +303,6 @@
    (usuario (evitarMarca ?marca))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (marca ?marca))
-   
    =>
    (modify ?vf (puntuacion (- ?punt 10.0)))
 )
@@ -334,7 +311,6 @@
    (usuario (tipoCombustiblePreferido ?combustible))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (tipoCombustible ?combustible))
-   
    =>
    (modify ?vf (puntuacion (+ ?punt 5.0)))
 )
@@ -343,7 +319,6 @@
    (usuario (transmisionPreferida ?transmision))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (transmision ?transmision))
-   
    =>
    (modify ?vf (puntuacion (+ ?punt 3.0)))
 )
@@ -353,7 +328,6 @@
    (usuario (esPrimerVehiculo TRUE))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (tieneBonoPrimerAuto TRUE))
-   
    =>
    (modify ?vf (puntuacion (+ ?punt 5.0)))
 )
@@ -362,7 +336,6 @@
    (usuario (necesitaFinanciacion TRUE))
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt))
    ?v <- (vehiculo (id ?id) (planFinanciamiento TRUE))
-   
    =>
    (modify ?vf (puntuacion (+ ?punt 4.0)))
 )
@@ -371,12 +344,11 @@
 (defrule generar-recomendaciones
    ?vf <- (vehiculo-filtrado (id ?id) (puntuacion ?punt&:(> ?punt 0)))
    ?v <- (vehiculo (id ?id) (marca ?marca) (modelo ?modelo))
-   
    =>
    (assert (recomendacion 
       (id-vehiculo ?id) 
       (puntuacion ?punt)
-      (motivo (str-cat "Modelo " ?marca " " ?modelo " con puntuación " ?punt))
+      (motivo (str-cat "Modelo " ?marca " " ?modelo " con puntuación " (format nil "%.1f" ?punt)))
    ))
 )
 
@@ -388,26 +360,25 @@
    (bind ?count (length$ ?recoms))
    (if (> ?count 0)
       then
-      (printout t crlf "=== RECOMENDACIONES FINALES ===" crlf)
-      (printout t "Perfil del usuario:" crlf)
-      (printout t "Edad: " (fact-slot-value ?u edad) crlf)
-      (printout t "Presupuesto: $" (fact-slot-value ?u presupuesto) crlf)
-      (printout t "Uso principal: " (fact-slot-value ?u usoPrincipal) crlf crlf)
-      
-      (printout t "Vehiculos recomendados:" crlf)
-      (do-for-all-facts ((?r recomendacion)) TRUE
-         (bind ?vid (fact-slot-value ?r id-vehiculo))
-         (bind ?v (find-fact ((?v vehiculo)) (eq ?v:id ?vid)))
-         (printout t 
-            "ID: " ?vid " | " 
-            (fact-slot-value ?v marca) " " (fact-slot-value ?v modelo) " | "
-            "Puntuación: " (fact-slot-value ?r puntuacion) " | "
-            "Precio: $" (fact-slot-value ?v precio) " | "
-            "Tipo: " (fact-slot-value ?v tipo) crlf
+         (printout t crlf "=== RECOMENDACIONES FINALES ===" crlf)
+         (printout t "Perfil del usuario:" crlf)
+         (printout t "Edad: " (fact-slot-value ?u edad) crlf)
+         (printout t "Presupuesto: $" (format nil "$%,.2f" (fact-slot-value ?u presupuesto)) crlf)
+         (printout t "Uso principal: " (fact-slot-value ?u usoPrincipal) crlf crlf)
+         (printout t "Vehiculos recomendados:" crlf)
+         (do-for-all-facts ((?r recomendacion)) TRUE
+            (bind ?vid (fact-slot-value ?r id-vehiculo))
+            (bind ?veh (find-fact ((?v vehiculo)) (eq ?v:id ?vid)))
+            (printout t 
+               "ID: " ?vid " | " 
+               (fact-slot-value ?veh marca) " " (fact-slot-value ?veh modelo) " | "
+               "Puntuación: " (format nil "%.1f" (fact-slot-value ?r puntuacion)) " | "
+               "Precio: " (format nil "$%,.2f" (fact-slot-value ?veh precio)) " | "
+               "Tipo: " (fact-slot-value ?veh tipo) crlf
+            )
          )
-      )
       else
-      (printout t "No se encontraron vehiculos adecuados para tu perfil" crlf)
+         (printout t "No se encontraron vehiculos adecuados para tu perfil" crlf)
    )
 )
 
@@ -421,7 +392,7 @@
       (ubicacion urbano)
       (estiloPersonalidad practico)
       (presupuesto 30000.0)
-      (usoPrincipal ciudad)
+      (usoPrincipal urbano)
       (esPrimerVehiculo FALSE)
       (necesitaFinanciacion TRUE)
       (buscaUsado FALSE)
@@ -447,5 +418,5 @@
 )
 
 ;; ==================== EJECUCIÓN ====================
-; (reset)
-; (run)
+(reset)
+(run)
