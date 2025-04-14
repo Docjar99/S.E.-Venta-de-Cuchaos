@@ -65,6 +65,7 @@
 ;; ==================== BASE DE DATOS DE VEHÍCULOS ====================
 (deffacts vehiculos-disponibles
    ;; Segmento Premium
+   ;; Vehículos ya existentes
    (vehiculo 
       (id 1) (marca Audi) (modelo A4) (ano 2015)
       (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
@@ -83,6 +84,286 @@
       (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
       (precio 28000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
       (planFinanciamiento FALSE) (calificacionVentas 5) (garantia 3)
+   )
+
+   (vehiculo 
+      (id 3) (marca BMW) (modelo Serie_3) (ano 2020)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 255) (consumo 6.4) (seguridad 5)
+      (espacioPasajeros 4) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 41000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 4)
+   )
+
+   (vehiculo 
+      (id 4) (marca Mercedes_Benz) (modelo Clase_C) (ano 2021)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 255) (consumo 6.9) (seguridad 5)
+      (espacioPasajeros 4) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 45000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 4) (garantia 4)
+   )
+
+   (vehiculo 
+      (id 5) (marca Lexus) (modelo ES_300h) (ano 2022)
+      (tipo sedan) (tipoCombustible hibrido) (transmision automatica)
+      (traccion delantera) (potencia 215) (consumo 5.5) (seguridad 5)
+      (espacioPasajeros 5) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 43000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
+      (planFinanciamiento TRUE) (calificacionVentas 4) (garantia 5)
+   )
+
+   (vehiculo 
+      (id 6) (marca Volvo) (modelo S60) (ano 2021)
+      (tipo sedan) (tipoCombustible hibrido) (transmision automatica)
+      (traccion integral) (potencia 250) (consumo 6.2) (seguridad 5)
+      (espacioPasajeros 5) (espacioMaletero 3) (asientosIsofix 3)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 47000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 7) (marca Jaguar) (modelo XE) (ano 2018)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 240) (consumo 7.0) (seguridad 5)
+      (espacioPasajeros 4) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 39000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 8) (marca Infiniti) (modelo Q50) (ano 2017)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 300) (consumo 7.2) (seguridad 5)
+      (espacioPasajeros 4) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 4) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 37000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
+      (planFinanciamiento TRUE) (calificacionVentas 4) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 9) (marca Cadillac) (modelo ATS) (ano 2014)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 273) (consumo 7.5) (seguridad 5)
+      (espacioPasajeros 4) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 4) (asistenciaConduccion FALSE) (conectividad TRUE)
+      (precio 36000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 4) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 10) (marca Alfa_Romeo) (modelo Giulia) (ano 2020)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 280) (consumo 7.0) (seguridad 5)
+      (espacioPasajeros 4) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 42000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 11) (marca Tesla) (modelo Model_S) (ano 2021)
+      (tipo sedan) (tipoCombustible electrico) (transmision automatica)
+      (traccion integral) (potencia 670) (consumo 0.0) (seguridad 5)
+      (espacioPasajeros 5) (espacioMaletero 4) (asientosIsofix 3)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 85000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 5)
+   )
+   
+   (vehiculo 
+      (id 12) (marca Porsche) (modelo Panamera) (ano 2019)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 330) (consumo 8.0) (seguridad 5)
+      (espacioPasajeros 4) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 78000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 13) (marca Audi) (modelo A6) (ano 2015)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion integral) (potencia 265) (consumo 7.0) (seguridad 5)
+      (espacioPasajeros 4) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 40000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 14) (marca BMW) (modelo Serie_5) (ano 2016)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 320) (consumo 7.5) (seguridad 5)
+      (espacioPasajeros 4) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 45000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 15) (marca Mercedes_Benz) (modelo Clase_E) (ano 2018)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 300) (consumo 7.0) (seguridad 5)
+      (espacioPasajeros 4) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 50000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 5)
+   )
+   
+   (vehiculo 
+      (id 16) (marca Lexus) (modelo LS) (ano 2013)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion delantera) (potencia 306) (consumo 8.0) (seguridad 5)
+      (espacioPasajeros 5) (espacioMaletero 4) (asientosIsofix 3)
+      (nivelTecnologico 4) (asistenciaConduccion FALSE) (conectividad TRUE)
+      (precio 55000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
+      (planFinanciamiento TRUE) (calificacionVentas 4) (garantia 5)
+   )
+   
+   (vehiculo 
+      (id 17) (marca Maserati) (modelo Ghibli) (ano 2020)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 350) (consumo 9.0) (seguridad 5)
+      (espacioPasajeros 4) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 60000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 18) (marca Bentley) (modelo Flying_Spur) (ano 2022)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 626) (consumo 10.0) (seguridad 5)
+      (espacioPasajeros 5) (espacioMaletero 4) (asientosIsofix 2)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 240000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 5)
+   )
+   
+   (vehiculo 
+      (id 19) (marca Aston_Martin) (modelo Rapide) (ano 2019)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 450) (consumo 11.0) (seguridad 5)
+      (espacioPasajeros 4) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 150000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 20) (marca Rolls_Royce) (modelo Ghost) (ano 2020)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 563) (consumo 12.0) (seguridad 5)
+      (espacioPasajeros 5) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 300000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 5)
+   )
+   
+   (vehiculo 
+      (id 21) (marca Porsche) (modelo Taycan) (ano 2022)
+      (tipo sedan) (tipoCombustible electrico) (transmision automatica)
+      (traccion integral) (potencia 750) (consumo 0.0) (seguridad 5)
+      (espacioPasajeros 4) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 105000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 22) (marca Audi) (modelo A8) (ano 2021)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion integral) (potencia 420) (consumo 8.5) (seguridad 5)
+      (espacioPasajeros 5) (espacioMaletero 3) (asientosIsofix 3)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 65000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 5)
+   )
+   
+   (vehiculo 
+      (id 23) (marca BMW) (modelo Serie_7) (ano 2023)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 530) (consumo 9.0) (seguridad 5)
+      (espacioPasajeros 5) (espacioMaletero 4) (asientosIsofix 3)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 75000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 24) (marca Mercedes_Benz) (modelo S_Class) (ano 2024)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 550) (consumo 9.5) (seguridad 5)
+      (espacioPasajeros 5) (espacioMaletero 4) (asientosIsofix 3)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 80000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 5)
+   )
+   
+   (vehiculo 
+      (id 25) (marca Jaguar) (modelo XJ) (ano 2015)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 380) (consumo 8.0) (seguridad 5)
+      (espacioPasajeros 5) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 4) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 48000.0) (disponible TRUE) (tieneBonoPrimerAuto FALSE)
+      (planFinanciamiento TRUE) (calificacionVentas 4) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 26) (marca Maserati) (modelo Quattroporte) (ano 2017)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 404) (consumo 9.0) (seguridad 5)
+      (espacioPasajeros 5) (espacioMaletero 4) (asientosIsofix 3)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 52000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 27) (marca Lexus) (modelo IS) (ano 2014)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion delantera) (potencia 200) (consumo 6.5) (seguridad 5)
+      (espacioPasajeros 4) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 4) (asistenciaConduccion FALSE) (conectividad TRUE)
+      (precio 35000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
+      (planFinanciamiento TRUE) (calificacionVentas 4) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 28) (marca Infiniti) (modelo Q70) (ano 2018)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion trasera) (potencia 300) (consumo 7.2) (seguridad 5)
+      (espacioPasajeros 4) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 4) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 39000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
+      (planFinanciamiento TRUE) (calificacionVentas 4) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 29) (marca Volvo) (modelo S90) (ano 2020)
+      (tipo sedan) (tipoCombustible gasolina) (transmision automatica)
+      (traccion integral) (potencia 310) (consumo 7.0) (seguridad 5)
+      (espacioPasajeros 5) (espacioMaletero 3) (asientosIsofix 3)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 47000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 4)
+   )
+   
+   (vehiculo 
+      (id 30) (marca Genesis) (modelo G80) (ano 2025)
+      (tipo sedan) (tipoCombustible hibrido) (transmision automatica)
+      (traccion delantera) (potencia 290) (consumo 6.7) (seguridad 5)
+      (espacioPasajeros 5) (espacioMaletero 3) (asientosIsofix 2)
+      (nivelTecnologico 5) (asistenciaConduccion TRUE) (conectividad TRUE)
+      (precio 40000.0) (disponible TRUE) (tieneBonoPrimerAuto TRUE)
+      (planFinanciamiento TRUE) (calificacionVentas 5) (garantia 4)
    )
    
    ;; Segmento Familiar
