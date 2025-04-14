@@ -23,6 +23,7 @@
    (slot transmisionPreferida (type SYMBOL))
    (slot historialConduccion (type INTEGER))
    (slot rechazosConsecutivos (type INTEGER))
+   (slot indice-recomendaciones (type INTEGER))  ; Nuevo slot para controlar paginación
    (multislot vehiculosVistos)
 )
 
@@ -792,9 +793,8 @@
   (bind ?transmision (read))
   (printout t "Ingrese el historial de conducción:" crlf)
   (bind ?historial (read))
-  (printout t "Ingrese los rechazos consecutivos:" crlf)
+  (printout t "Ingrese los rechazos consecutivos (inicialmente 0):" crlf)
   (bind ?rechazos (read))
-  ; Crear el hecho usuario con los valores ingresados
   (assert (usuario 
       (edad ?edad)
       (genero ?genero)
@@ -817,20 +817,90 @@
       (transmisionPreferida ?transmision)
       (historialConduccion ?historial)
       (rechazosConsecutivos ?rechazos)
+      (indice-recomendaciones 1)  ; Inicializado en 1
       (vehiculosVistos)
   ))
   (printout t "Datos del usuario ingresados correctamente." crlf)
 )
-
-; Llamada a la función para ingresar los datos del usuario
-
-
-
-(defrule mostrar-recomendaciones
-   (declare (salience -10)) ; Baja prioridad para ejecutarse al final
-   ?r <- (recomendacion (id-vehiculo ?id) (puntuacion ?punt) (motivo ?motivo))
-   =>
-   (printout t "Recomendación: " ?motivo crlf)
-   (retract ?r)
+(deffunction gestionar-rechazo ()
+  (printout t "¿Acepta la recomendación? (si/no): " )
+  (bind ?respuesta (read))
+  (if (eq ?respuesta si)
+      then (printout t "Recomendación aceptada. Gracias." crlf)
+      else
+         (printout t "Recomendación rechazada." crlf)
+         ; Actualizamos los rechazos en el hecho usuario
+         (bind ?u (find-all-facts ((?u usuario)) TRUE))
+         (if (> (length$ ?u) 0)
+             then (bind ?usuario (nth$ 1 ?u ))
+             else (printout t "No se encontró el usuario." crlf))
+         (if (neq ?usuario FALSE)
+             then
+               (bind ?rechazos (fact-slot-value ?usuario rechazosConsecutivos))
+               (modify ?usuario (rechazosConsecutivos (+ ?rechazos 1)))
+               (printout t "Número de rechazos consecutivos actualizado a " (+ ?rechazos 1) crlf)
+             else (printout t "No se pudo actualizar el usuario." crlf))
+  )
 )
 
+(deffunction mostrar-y-gestionar-recomendaciones ()
+  (bind ?all-recs (find-all-facts ((?r recomendacion)) TRUE))
+  (bind ?sorted-recs (sort-descending ?all-recs))
+  (bind ?total-recs (length$ ?sorted-recs))
+  
+  ; Inicializar o incrementar el índice de visualización
+  (bind ?u (find-all-facts ((?u usuario)) TRUE))
+  (if (> (length$ ?u) 0)
+      then
+          (bind ?usuario (nth$ 1 ?u))
+          (bind ?start-index (fact-slot-value ?usuario indice-recomendaciones))
+          (if (not ?start-index) then (bind ?start-index 1))
+      else
+          (bind ?start-index 1))
+  
+  ; Calcular rango de recomendaciones a mostrar (5 por vez)
+  (bind ?end-index (min (+ ?start-index 4) ?total-recs))
+  (bind ?recs-a-mostrar (subseq$ ?sorted-recs ?start-index ?end-index))
+  
+  (if (> (length$ ?recs-a-mostrar) 0)
+      then
+          (printout t crlf "----- RECOMENDACIONES ACTUALES (de " ?start-index " a " ?end-index ") -----" crlf)
+          (foreach ?r ?recs-a-mostrar
+              (bind ?motivo (fact-slot-value ?r motivo))
+              (bind ?punt (fact-slot-value ?r puntuacion))
+              (printout t ?motivo crlf))
+          
+          (printout t crlf "¿Acepta alguna de estas recomendaciones? (si/no): ")
+          (bind ?resp (read))
+          
+          (if (eq ?resp si)
+              then
+                  (printout t "Recomendación aceptada. ¡Gracias!" crlf)
+                  ; Resetear el índice si acepta
+                  (if (and ?usuario (neq ?usuario nil))
+                      then (modify ?usuario (indice-recomendaciones 1)))
+              else
+                  (printout t "Recomendación rechazada." crlf)
+                  ; Actualizar contador de rechazos
+                  (if (and ?usuario (neq ?usuario nil))
+                      then
+                          (bind ?rechazos (fact-slot-value ?usuario rechazosConsecutivos))
+                          (modify ?usuario 
+                              (rechazosConsecutivos (+ ?rechazos 1)))
+                          ; Avanzar al siguiente grupo de 5
+                          (if (< ?end-index ?total-recs)
+                              then
+                                  (modify ?usuario (indice-recomendaciones (+ ?end-index 1)))
+                                  (printout t "Puede consultar más opciones ejecutando esta función nuevamente." crlf)
+                              else
+                                  (modify ?usuario (indice-recomendaciones 1)))
+                                  (printout t "No hay más recomendaciones disponibles. Volviendo al inicio." crlf)
+                          )
+                  )
+          )
+      else
+          (printout t "No se han generado recomendaciones." crlf)
+          ; Resetear el índice si no hay recomendaciones
+          (if (and ?usuario (neq ?usuario nil))
+              then (modify ?usuario (indice-recomendaciones 1)))
+  )
