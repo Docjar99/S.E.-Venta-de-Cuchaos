@@ -1,4 +1,5 @@
 
+
 ;; ==================== DEFINICIÓN DE PLANTILLAS ====================
 (deftemplate usuario
    (slot edad (type INTEGER))
@@ -666,6 +667,85 @@
       (puntuacion ?punt)
       (motivo (str-cat "Modelo " ?marca " " ?modelo " con puntuación " (format nil "%.1f" ?punt)))
    ))
+)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;      FUNCIONES PARA ORDENAR LOS RESULTADOS       ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Función que concatena dos multifields usando foreach.
+(deffunction my-append (?mf1 ?mf2)
+  "Concatena dos multifields ?mf1 y ?mf2 y devuelve el resultado."
+  (bind ?result (create$))
+  ; Agregar elementos de ?mf1
+  (foreach ?x ?mf1
+     (bind ?result (create$ ?result ?x)))
+  ; Agregar elementos de ?mf2
+  (foreach ?y ?mf2
+     (bind ?result (create$ ?result ?y)))
+  (return ?result)
+)
+
+(deffunction find-max (?lst)
+  "Devuelve el elemento de ?lst que tiene el mayor slot 'puntuacion'."
+  (bind ?max nil)
+  (bind ?i 1)
+  (bind ?len (length$ ?lst))
+  (while (<= ?i ?len)
+     ; Usar nth$ con el índice primero
+     (bind ?item (nth$ ?i ?lst))
+     (if (or (eq ?max nil)
+             (> (fact-slot-value ?item puntuacion)
+                (fact-slot-value ?max puntuacion)))
+         then (bind ?max ?item))
+     (bind ?i (+ ?i 1))
+  )
+  (return ?max)
+)
+
+(deffunction remove-item (?lst ?item)
+  "Devuelve una nueva lista a partir de ?lst removiendo ?item."
+  (bind ?result (create$))
+  (bind ?i 1)
+  (bind ?len (length$ ?lst))
+  (while (<= ?i ?len)
+     (bind ?temp (nth$ ?i ?lst))
+     (if (neq ?temp ?item)
+         then (bind ?result (my-append ?result (create$ ?temp))))
+     (bind ?i (+ ?i 1))
+  )
+  (return ?result)
+)
+
+(deffunction sort-descending (?lst)
+  "Ordena la lista ?lst en forma descendente según el slot 'puntuacion'."
+  (if (<= (length$ ?lst) 0)
+      then (return (create$))
+      else
+         (bind ?max (find-max ?lst))
+         (bind ?remaining (remove-item ?lst ?max))
+         (bind ?sorted (sort-descending ?remaining))
+         (return (my-append (create$ ?max) ?sorted))
+  )
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;         REGLA PARA SELECCIONAR TOP 5            ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defrule seleccionar-top5
+   =>
+   (bind ?all (find-all-facts ((?vf vehiculo-filtrado)) TRUE))
+   (bind ?sorted (sort-descending ?all))
+   (if (>= (length$ ?sorted) 5)
+       then (bind ?top5 (subseq$ ?sorted 1 5))
+       else (bind ?top5 ?sorted))
+   (printout t "----- TOP 5 VEHÍCULOS CON MAYOR PUNTUACIÓN -----" crlf)
+   (foreach ?fact ?top5
+      (printout t "ID: " (fact-slot-value ?fact id) " | Puntuación: " 
+                 (fact-slot-value ?fact puntuacion) crlf)
+   )
 )
 
 
