@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tu Carro Ideal</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='bienvenido.css') }}">
+</head>
+<body class="pantalla pantalla2">
+  <img class="fondo" src="{{ url_for('static', filename='carro2.jpg') }}" alt="auto portada" />
+  <div class="contenido centrado">
+    <h1>TU CARRO IDEAL</h1>
+    <p>
+      Para poder recomendarte el carro ideal para ti, vamos a realizar una serie de preguntas personalizadas.
+      Queremos conocerte un poco mejor para que encuentres el vehículo perfecto que se ajuste a tu estilo de vida,
+      tus necesidades y tus gustos. ¡Vamos a empezar y encontrar el auto de tus sueños!
+    </p>
+    <a href="{{ url_for('ingresardatos') }}" class="btn-continuar">CONTINUAR</a>
+  </div>
+</body>
+</html>

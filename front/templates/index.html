@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bienvenido a CarDealer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+
+</head>
+<body class="pantalla">
+  <img class="fondo" src="{{ url_for('static', filename='carro1.jpg') }}" alt="auto portada" />
+  <div class="contenido">
+    <div class="bienvenida">BIENVENIDO A CARDEALER</div>
+  </div>
+  <a href="{{ url_for('bienvenido') }}" class="flecha">→</a>
+</body>
+</html>

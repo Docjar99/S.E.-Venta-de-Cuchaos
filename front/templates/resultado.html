@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Resultado - CarDealer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='resultado.css') }}">
+</head>
+<body class="pantalla">
+  <div class="resultado">
+    <h1>Vehículos recomendados</h1>
+    {% if recomendaciones %}
+      {% for r in recomendaciones %}
+        <div class="card">
+          <p>{{ r }}</p>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No se encontraron recomendaciones para tu perfil.</p>
+    {% endif %}
+    <a href="{{ url_for('index') }}" class="volver">Volver al inicio</a>
+  </div>
+</body>
+</html>

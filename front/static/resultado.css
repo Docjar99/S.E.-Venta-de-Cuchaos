@@ -1,0 +1,47 @@
+.resultado-body {
+    margin: 0;
+    padding: 0;
+    background-color: #111;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .resultado-container {
+    width: 80%;
+    background-color: #1b1b1b;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.5);
+    text-align: center;
+  }
+  
+  .recomendacion-box {
+    text-align: left;
+    background-color: #222;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    font-family: monospace;
+  }
+  
+  .volver-btn {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 10px 20px;
+    background-color: #444;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.3s;
+  }
+  
+  .volver-btn:hover {
+    background-color: #666;
+  }
+  
